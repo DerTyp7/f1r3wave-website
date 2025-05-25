@@ -30,6 +30,16 @@ export default function Contact() {
 						/>
 					</a>
 				</div>
+
+				<div className="imprint">
+					<h2 className="imprint-headline">Imprint / Legal Notice</h2>
+					<span>[Your Full Name]</span>
+					<span>
+						[Your Full Address: Street and House Number, Postcode City]
+					</span>
+					<span>[YourCountry (e.g., Germany)]</span>
+					<span>[Your E-Mail Address]</span>
+				</div>
 			</div>
 		</div>
 	);

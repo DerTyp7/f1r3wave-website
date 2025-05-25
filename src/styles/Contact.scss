@@ -1,7 +1,9 @@
 .contact {
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	width: 100%;
+	gap: 20px;
 	flex-direction: column;
 
 	&__title {
@@ -41,4 +43,15 @@
 		width: 100%;
 		height: 100%;
 	}
+}
+
+.imprint {
+	border-top: 1px solid grey;
+	width: 500px;
+	display: flex;
+	flex-direction: column;
+}
+
+.imprint-headline {
+	text-align: center;
 }
