@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://f1r3wave.photos/sitemap.xml
