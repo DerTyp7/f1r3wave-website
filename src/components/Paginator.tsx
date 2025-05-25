@@ -19,7 +19,7 @@ export default function Paginator({
 }) {
 	useEffect(() => {}, []);
 
-	return (
+	return totalPages > 1 ? (
 		<div
 			className={`paginator ${
 				position === PaginatorPosition.TOP
@@ -53,5 +53,7 @@ export default function Paginator({
 				Next
 			</button>
 		</div>
+	) : (
+		""
 	);
 }
