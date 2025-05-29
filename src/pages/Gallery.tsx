@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Paginator from "@/components/Paginator";
 import { PaginatorPosition } from "@/interfaces/paginator";
 import LazyImage from "@/components/LazyImage";
+import Footer from "@/components/Footer";
 
 export default function Gallery() {
   const navigate = useNavigate();
@@ -156,97 +157,99 @@ export default function Gallery() {
   }, [filteredImages, currentPage]);
 
   return (
-    <div className="gallery">
+    <>
       <Header />
-
-      <div className="tags">
-        <span
-          key="all"
-          className={`tags__tag ${!new URLSearchParams(location.search).get("tag") ? "tags__tag--active" : ""}`}
-          onClick={() => navigate("")}
-        >
-          All
-        </span>
-        {tags.map((tag, index) => {
-          const queryParams = new URLSearchParams(location.search);
-          const activeTag = queryParams.get("tag");
-
-          return (
-            <span
-              key={index}
-              className={`tags__tag ${activeTag === tag ? "tags__tag--active" : ""}`}
-              onClick={() => navigate(`?tag=${encodeURIComponent(tag)}`)}
-            >
-              {tag}
-            </span>
-          );
-        })}
-      </div>
-
-      <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} position={PaginatorPosition.TOP} />
-
-      <div className="images">
-        {!loading && filteredImages.length === 0 && <p>No images found</p>}
-        {!loading &&
-          columns.map((column, columnIndex) => (
-            <div className="images__column" key={columnIndex}>
-              {column.map((image) => (
-                <LazyImage
-                  key={uuidv4()}
-                  src={`/images/${image.relative_path}`}
-                  alt={image.relative_path}
-                  onClick={() => setFullScreenImage(`/images/${image.relative_path}`)} // Open full-screen view
-                />
-              ))}
-            </div>
-          ))}
-      </div>
-
-      <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} position={PaginatorPosition.BOTTOM} />
-
-      {/* Full-Screen Modal */}
-      {fullScreenImage && (
-        <div className="fullscreen-modal" onClick={() => setFullScreenImage(null)}>
-          <img src={fullScreenImage} alt="Full Screen" />
-          <button
-            className="close-button"
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent closing when clicking the button
-              setFullScreenImage(null);
-            }}
+      <div className="gallery">
+        <div className="tags">
+          <span
+            key="all"
+            className={`tags__tag ${!new URLSearchParams(location.search).get("tag") ? "tags__tag--active" : ""}`}
+            onClick={() => navigate("")}
           >
-            &times;
-          </button>
+            All
+          </span>
+          {tags.map((tag, index) => {
+            const queryParams = new URLSearchParams(location.search);
+            const activeTag = queryParams.get("tag");
 
-          {/* Left Arrow */}
-          <button
-            className="arrow-button arrow-button--left"
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent closing when clicking the button
-              const currentIndex = filteredImages.findIndex((image) => `/images/${image.relative_path}` === fullScreenImage);
-              if (currentIndex > 0) {
-                setFullScreenImage(`/images/${filteredImages[currentIndex - 1].relative_path}`);
-              }
-            }}
-          >
-            &#8249;
-          </button>
-
-          {/* Right Arrow */}
-          <button
-            className="arrow-button arrow-button--right"
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent closing when clicking the button
-              const currentIndex = filteredImages.findIndex((image) => `/images/${image.relative_path}` === fullScreenImage);
-              if (currentIndex < filteredImages.length - 1) {
-                setFullScreenImage(`/images/${filteredImages[currentIndex + 1].relative_path}`);
-              }
-            }}
-          >
-            &#8250;
-          </button>
+            return (
+              <span
+                key={index}
+                className={`tags__tag ${activeTag === tag ? "tags__tag--active" : ""}`}
+                onClick={() => navigate(`?tag=${encodeURIComponent(tag)}`)}
+              >
+                {tag}
+              </span>
+            );
+          })}
         </div>
-      )}
-    </div>
+
+        <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} position={PaginatorPosition.TOP} />
+
+        <div className="images">
+          {!loading && filteredImages.length === 0 && <p>No images found</p>}
+          {!loading &&
+            columns.map((column, columnIndex) => (
+              <div className="images__column" key={columnIndex}>
+                {column.map((image) => (
+                  <LazyImage
+                    key={uuidv4()}
+                    src={`/images/${image.relative_path}`}
+                    alt={image.relative_path}
+                    onClick={() => setFullScreenImage(`/images/${image.relative_path}`)} // Open full-screen view
+                  />
+                ))}
+              </div>
+            ))}
+        </div>
+
+        <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} position={PaginatorPosition.BOTTOM} />
+
+        {/* Full-Screen Modal */}
+        {fullScreenImage && (
+          <div className="fullscreen-modal" onClick={() => setFullScreenImage(null)}>
+            <img src={fullScreenImage} alt="Full Screen" />
+            <button
+              className="close-button"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent closing when clicking the button
+                setFullScreenImage(null);
+              }}
+            >
+              &times;
+            </button>
+
+            {/* Left Arrow */}
+            <button
+              className="arrow-button arrow-button--left"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent closing when clicking the button
+                const currentIndex = filteredImages.findIndex((image) => `/images/${image.relative_path}` === fullScreenImage);
+                if (currentIndex > 0) {
+                  setFullScreenImage(`/images/${filteredImages[currentIndex - 1].relative_path}`);
+                }
+              }}
+            >
+              &#8249;
+            </button>
+
+            {/* Right Arrow */}
+            <button
+              className="arrow-button arrow-button--right"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent closing when clicking the button
+                const currentIndex = filteredImages.findIndex((image) => `/images/${image.relative_path}` === fullScreenImage);
+                if (currentIndex < filteredImages.length - 1) {
+                  setFullScreenImage(`/images/${filteredImages[currentIndex + 1].relative_path}`);
+                }
+              }}
+            >
+              &#8250;
+            </button>
+          </div>
+        )}
+      </div>
+      <Footer />
+    </>
   );
 }

@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { useConfig } from "@/contexts/configExports";
 import "@styles/Home.scss";
@@ -6,7 +7,7 @@ export default function Home() {
   const { config } = useConfig();
 
   return (
-    <div>
+    <>
       <Header />
 
       <div className="home">
@@ -16,6 +17,8 @@ export default function Home() {
           <a href="/gallery" className="home-button" dangerouslySetInnerHTML={{ __html: config?.home.buttonText || "" }}></a>
         </div>
       </div>
-    </div>
+
+      <Footer isInLandingPage />
+    </>
   );
 }

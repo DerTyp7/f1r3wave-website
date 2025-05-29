@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { useConfig } from "@/contexts/configExports";
 import "@styles/Contact.scss";
@@ -11,7 +12,7 @@ export default function Contact() {
   const [currentHoverUrl, setCurrentHoverUrl] = useState<string>("");
 
   return (
-    <div>
+    <>
       <Header />
 
       <div className="contact">
@@ -49,6 +50,8 @@ export default function Contact() {
           ""
         )}
       </div>
-    </div>
+
+      <Footer />
+    </>
   );
 }

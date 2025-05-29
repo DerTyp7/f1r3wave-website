@@ -7,7 +7,7 @@ import { ConfigProvider } from "@/contexts/ConfigContext";
 
 export default function App() {
   return (
-    <>
+    <div className="app">
       <ConfigProvider>
         <Router>
           <Routes>
@@ -17,6 +17,6 @@ export default function App() {
           </Routes>
         </Router>
       </ConfigProvider>
-    </>
+    </div>
   );
 }
