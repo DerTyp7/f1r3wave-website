@@ -1,49 +1,49 @@
 .contact {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	gap: 20px;
-	flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+  flex-direction: column;
 
-	&__title {
-		text-align: center;
-	}
+  &__title {
+    text-align: center;
+  }
 }
 
 .contact-links {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	gap: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 30px;
 }
 
 .contact-links-link {
-	width: 130px;
-	height: 130px;
-	padding: 20px;
-	border-radius: 10px;
-	background-color: rgba(255, 255, 255, 0.1);
-	transition: all 50ms linear;
-	cursor: pointer;
+  width: 130px;
+  height: 130px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 50ms linear;
+  cursor: pointer;
 
-	&:hover {
-		background-color: var(--hover-color);
-	}
+  &:hover {
+    background-color: var(--hover-color);
+  }
 
-	&__image {
-		width: 100%;
-		height: 100%;
-	}
+  &__image {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .imprint {
-	border-top: 1px solid grey;
-	width: 500px;
-	display: flex;
-	flex-direction: column;
+  border-top: 1px solid grey;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
 }
 
 .imprint-headline {
-	text-align: center;
+  text-align: center;
 }

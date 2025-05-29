@@ -1,47 +1,47 @@
 .paginator {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 10px;
-	gap: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 5px;
 
-	&--top {
-		margin-bottom: 10px;
-		border-bottom: 1px solid rgba(209, 209, 209, 0.2);
-	}
+  &--top {
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(209, 209, 209, 0.2);
+  }
 
-	&--bottom {
-		border-top: 2px solid rgba(180, 180, 180, 0.466);
-		margin: 30px;
-	}
+  &--bottom {
+    border-top: 2px solid rgba(180, 180, 180, 0.466);
+    margin: 30px;
+  }
 
-	button {
-		padding: 5px 10px;
-		border: none;
-		background-color: transparent;
-		color: white;
-		cursor: pointer;
-		border-radius: 5px;
-		border: 2px solid transparent;
-		font-size: 12pt;
-		transition: all 30ms ease-in-out;
+  button {
+    padding: 5px 10px;
+    border: none;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 2px solid transparent;
+    font-size: 12pt;
+    transition: all 30ms ease-in-out;
 
-		&:hover {
-			border-color: #2a9d6d;
-		}
+    &:hover {
+      border-color: #2a9d6d;
+    }
 
-		&.active {
-			border-color: #2a9d6d;
-			font-weight: bold;
-		}
+    &.active {
+      border-color: #2a9d6d;
+      font-weight: bold;
+    }
 
-		&:disabled {
-			background-color: #0f0f0f;
-			cursor: not-allowed;
+    &:disabled {
+      background-color: #0f0f0f;
+      cursor: not-allowed;
 
-			&:hover {
-				border-color: transparent;
-			}
-		}
-	}
+      &:hover {
+        border-color: transparent;
+      }
+    }
+  }
 }

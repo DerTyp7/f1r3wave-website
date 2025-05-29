@@ -6,17 +6,17 @@ import Contact from "@pages/Contact";
 import { ConfigProvider } from "@/contexts/ConfigContext";
 
 export default function App() {
-	return (
-		<>
-			<ConfigProvider>
-				<Router>
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/gallery" element={<Gallery />} />
-						<Route path="/contact" element={<Contact />} />
-					</Routes>
-				</Router>
-			</ConfigProvider>
-		</>
-	);
+  return (
+    <>
+      <ConfigProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </Router>
+      </ConfigProvider>
+    </>
+  );
 }
