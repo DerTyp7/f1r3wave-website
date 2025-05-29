@@ -1,45 +1,56 @@
 import Header from "@/components/Header";
+import { useConfig } from "@/contexts/configExports";
 import "@styles/Contact.scss";
+import { useState } from "react";
 
 export default function Contact() {
+	const { config } = useConfig();
+	const [currentHoverUrl, setCurrentHoverUrl] = useState<string>("");
+
 	return (
 		<div>
 			<Header />
 
 			<div className="contact">
-				<h1 className="contact__title">Contact Me</h1>
+				<h1 className="contact__title">{config?.contact.headline}</h1>
 				<div className="contact-links">
-					<a
-						className="contact-links-link contact-links-link--instagram"
-						href="https://www.instagram.com/f1r3wave"
-					>
-						<img
-							className="contact-links-link__image"
-							src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
-							alt="Instagram Logo"
-						/>
-					</a>
-					<a
-						className="contact-links-link contact-links-link--email"
-						href="mailto:erichantke@hotmail.com"
-					>
-						<img
-							className="contact-links-link__image"
-							src="https://static.vecteezy.com/system/resources/thumbnails/014/440/980/small_2x/email-message-icon-design-in-blue-circle-png.png"
-							alt="Instagram Logo"
-						/>
-					</a>
+					{config?.contact?.links?.map((link) => (
+						<a
+							key={link.url}
+							className={`contact-links-link`}
+							href={link.url}
+							onMouseEnter={() => setCurrentHoverUrl(link.url)}
+							onMouseLeave={() => setCurrentHoverUrl("")}
+							style={
+								currentHoverUrl === link.url
+									? {
+											backgroundColor: link.hoverColor,
+									  }
+									: {}
+							}
+						>
+							<img
+								className="contact-links-link__image"
+								src={link.image.src}
+								alt={link.image.alt}
+							/>
+						</a>
+					))}
 				</div>
 
-				<div className="imprint">
-					<h2 className="imprint-headline">Imprint / Legal Notice</h2>
-					<span>[Your Full Name]</span>
-					<span>
-						[Your Full Address: Street and House Number, Postcode City]
-					</span>
-					<span>[YourCountry (e.g., Germany)]</span>
-					<span>[Your E-Mail Address]</span>
-				</div>
+				{config?.contact.imprint.enable ? (
+					<div className="imprint">
+						<h2 className="imprint-headline">
+							{config?.contact.imprint.headline}
+						</h2>
+						<span>{config?.contact.imprint.name}</span>
+						<span>{config?.contact.imprint.address}</span>
+						<span>{config?.contact.imprint.country}</span>
+						<span>{config?.contact.imprint.email}</span>
+					</div>
+				) : (
+					""
+				)}
 			</div>
 		</div>
 	);

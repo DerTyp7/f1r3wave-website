@@ -27,16 +27,8 @@
 	transition: all 50ms linear;
 	cursor: pointer;
 
-	&--instagram {
-		&:hover {
-			background-color: rgba(211, 122, 238, 0.25);
-		}
-	}
-
-	&--email {
-		&:hover {
-			background-color: rgba(78, 172, 248, 0.25);
-		}
+	&:hover {
+		background-color: var(--hover-color);
 	}
 
 	&__image {

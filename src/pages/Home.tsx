@@ -1,22 +1,29 @@
 import Header from "@/components/Header";
+import { useConfig } from "@/contexts/configExports";
 import "@styles/Home.scss";
 
 export default function Home() {
+	const { config } = useConfig();
+
 	return (
 		<div>
 			<Header />
 
 			<div className="home">
 				<div className="home-text">
-					<h1 className="home-text__headline">Portfolio</h1>
-					<p className="home-text__paragraph">
-						As a passionate <b>hobby photographer</b> , I capture the unique
-						beauty and atmosphere of various places. Join me on a visual journey
-						through my lens.
-					</p>
-					<a href="/gallery" className="home-button">
-						My Gallery
-					</a>
+					<h1
+						className="home-text__headline"
+						dangerouslySetInnerHTML={{ __html: config?.home.headline || "" }}
+					></h1>
+					<p
+						className="home-text__paragraph"
+						dangerouslySetInnerHTML={{ __html: config?.home.text || "" }}
+					></p>
+					<a
+						href="/gallery"
+						className="home-button"
+						dangerouslySetInnerHTML={{ __html: config?.home.buttonText || "" }}
+					></a>
 				</div>
 			</div>
 		</div>
