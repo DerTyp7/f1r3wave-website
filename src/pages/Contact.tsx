@@ -5,6 +5,9 @@ import { useState } from "react";
 
 export default function Contact() {
   const { config } = useConfig();
+  /**
+   * @description The url of the link element which is currently hovered. Using url as unique identifier.
+   */
   const [currentHoverUrl, setCurrentHoverUrl] = useState<string>("");
 
   return (

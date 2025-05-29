@@ -1,10 +1,5 @@
-import { useEffect } from "react";
 import "@/styles/Paginator.scss";
-
-export enum PaginatorPosition {
-  TOP,
-  BOTTOM,
-}
+import { PaginatorPosition } from "@/interfaces/paginator";
 
 export default function Paginator({
   currentPage,
@@ -17,8 +12,6 @@ export default function Paginator({
   totalPages: number;
   position?: PaginatorPosition | undefined;
 }) {
-  useEffect(() => {}, []);
-
   return totalPages > 1 ? (
     <div
       className={`paginator ${

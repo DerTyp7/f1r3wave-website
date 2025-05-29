@@ -4,21 +4,9 @@ import "@/styles/Gallery.scss";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Paginator, { PaginatorPosition } from "@/components/Paginator";
-
-function LazyImage({ src, alt, onClick }: { src: string; alt: string; onClick: () => void }) {
-  const [loaded, setLoaded] = useState(false);
-
-  return (
-    <img
-      className={`lazy-image ${loaded ? "lazy-image--loaded" : "lazy-image--loading"}`}
-      src={src}
-      alt={alt}
-      onLoad={() => setLoaded(true)}
-      onClick={onClick}
-    />
-  );
-}
+import Paginator from "@/components/Paginator";
+import { PaginatorPosition } from "@/interfaces/paginator";
+import LazyImage from "@/components/LazyImage";
 
 export default function Gallery() {
   const navigate = useNavigate();

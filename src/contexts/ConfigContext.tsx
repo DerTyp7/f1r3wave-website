@@ -1,5 +1,5 @@
-// src/contexts/ConfigContext.tsx
-import { AppConfig, ConfigContext, ConfigContextType } from "@/contexts/configExports";
+import { ConfigContext } from "@/contexts/configExports";
+import { AppConfig, ConfigContextType } from "@/interfaces/config";
 import React, { useState, useEffect, ReactNode } from "react";
 
 export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
