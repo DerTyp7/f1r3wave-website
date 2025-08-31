@@ -1,0 +1,38 @@
+.header {
+	display: flex;
+	justify-content: space-between;
+	background-color: rgb(29, 29, 29);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	height: var(--header-height);
+
+	&Logo {
+		padding: 20px;
+		height: 20px;
+		width: auto;
+	}
+}
+
+.headerNav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 30px;
+	padding: 0 20px;
+
+	&Link {
+		transition: all 50ms ease-in-out;
+		font-weight: bold;
+		border-bottom: 2px solid transparent;
+		text-decoration: none;
+		color: inherit;
+
+		&:hover {
+			color: var(--color-accent);
+		}
+
+		&Active {
+			color: var(--color-accent);
+			border-color: var(--color-accent);
+		}
+	}
+}
