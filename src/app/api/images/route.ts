@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     // Generate UUID filename
     const fileExtension = file.name.split('.').pop();
     const uuidFilename = `${uuidv4()}.${fileExtension}`;
-    const relativePath = `/${uuidFilename}`;
+    const relativePath = `${uuidFilename}`;
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const filePath = path.join(imagesDir, uuidFilename);
