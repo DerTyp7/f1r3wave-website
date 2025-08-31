@@ -6,7 +6,7 @@ import Link from "next/link";
 import styles from "./styles.module.scss";
 import landingPageImage from "../../public/landing-page.jpg";
 
-export default function Home() {
+export default function HomePage() {
 	const { config } = useConfig();
 
 	return (

@@ -1,3 +1,4 @@
+import ImageUpload from "@/components/ImageUpload";
 import { getAuthStatus } from "@/lib/auth-utils";
 import { redirect } from "next/navigation";
 
@@ -22,16 +23,7 @@ export default async function AdminPage() {
 				</div>
 			</header>
 			<main>
-				<div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-					{/* Add your admin content here */}
-					<div className="px-4 py-8 sm:px-0">
-						<div className="h-96 rounded-lg border-4 border-dashed border-gray-200">
-							<div className="flex h-full items-center justify-center">
-								<p className="text-gray-500">Admin content goes here</p>
-							</div>
-						</div>
-					</div>
-				</div>
+				<ImageUpload />
 			</main>
 		</div>
 	);

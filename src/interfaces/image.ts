@@ -1,4 +1,6 @@
 export interface ImageMeta {
-  "relative_path": string;
-  "tags": string[];
+  id: string;
+  relative_path: string;
+  tags: string[];
+  gridSize: { rows: number; cols: number };
 }
