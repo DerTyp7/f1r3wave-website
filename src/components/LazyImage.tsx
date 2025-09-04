@@ -20,6 +20,7 @@ export default function LazyImage({
 			src={src}
 			alt={alt}
 			width={300}
+			style={{ objectFit: "cover" }}
 			height={200}
 			onLoad={() => setLoaded(true)}
 			onClick={onClick}

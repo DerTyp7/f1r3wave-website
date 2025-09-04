@@ -8,23 +8,38 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Paginator from "@/components/Paginator";
 import { PaginatorPosition } from "@/interfaces/paginator";
-import LazyImage from "@/components/LazyImage";
 import Image from "next/image";
 import { ImagesResponse } from "@/interfaces/api";
+
+const HORIZONTAL_ASPECT_RATIO = 1.5;
+const VERTICAL_ASPECT_RATIO = 0.8;
 
 export default function Gallery() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [images, setImages] = useState<ImageMeta[]>([]);
+	const [page, setPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(1);
 	const [tags, setTags] = useState<string[]>([]);
-	const [columns, setColumns] = useState<ImageMeta[][]>([[], [], [], []]);
 	const [loading, setLoading] = useState(true);
-	const [currentPage, setCurrentPage] = useState(1);
+	const [columnCount, setColumnCount] = useState(0);
 	const [fullScreenImage, setFullScreenImage] = useState<string | null>(null);
 
-	const imagesPerPage = 40;
-
 	useEffect(() => {
+		const updateColumnCount = () => {
+			const container = document.querySelector(`.${styles.images}`);
+			if (!container) return;
+
+			const newColumnCount = window
+				.getComputedStyle(container)
+				.getPropertyValue("grid-template-columns")
+				.split(" ").length;
+
+			if (newColumnCount !== columnCount) {
+				setColumnCount(newColumnCount);
+			}
+		};
+
 		const fetchImages = async () => {
 			try {
 				const response = await fetch(`/api/images?${searchParams.toString()}`);
@@ -35,8 +50,10 @@ export default function Gallery() {
 				}
 
 				const data = (await response.json()) as ImagesResponse;
+				setPage(data.page);
+				setTotalPages(data.totalPages);
 				setImages(data.images);
-				setCurrentPage(data.page);
+				updateColumnCount();
 				setLoading(false);
 			} catch (error) {
 				console.error("Error fetching images:", error);
@@ -62,42 +79,66 @@ export default function Gallery() {
 
 		fetchImages();
 		fetchTags();
+
+		window.addEventListener("resize", updateColumnCount);
+		return () => window.removeEventListener("resize", updateColumnCount);
 	}, [searchParams]);
 
 	useEffect(() => {
 		const updateColumns = () => {
-			let columnCount = 4;
-			const width = window.innerWidth;
+			const newImages = [...images];
 
-			if (width <= 600) {
-				columnCount = 1;
-			} else if (width <= 900) {
-				columnCount = 2;
-			} else if (width <= 1200) {
-				columnCount = 3;
+			if (images.length > 0) {
+				let usedColumnsInRow = 0;
+				let usedRowsInColumn = 0;
+				let imagePerRowCounter = 1;
+				let index = 0;
+				console.log("==============================", columnCount);
+
+				for (const image of images) {
+					console.log(index);
+					usedColumnsInRow +=
+						image.aspect_ratio > HORIZONTAL_ASPECT_RATIO ? 2 : 1;
+					usedRowsInColumn +=
+						image.aspect_ratio < VERTICAL_ASPECT_RATIO ? 2 : 1;
+
+					if (usedColumnsInRow > columnCount) {
+						const nextViableImage: ImageMeta | undefined = newImages
+							.slice(index)
+							.find((img) => {
+								const imgAspectRatio = img.aspect_ratio;
+								return (
+									imgAspectRatio <= HORIZONTAL_ASPECT_RATIO &&
+									image.aspect_ratio >= VERTICAL_ASPECT_RATIO
+								);
+							});
+
+						if (nextViableImage) {
+							console.log("Found next viable image:", nextViableImage);
+							newImages.splice(index, 1);
+							newImages.splice(index - 1, 0, nextViableImage);
+							console.log("Updated image positions:", newImages);
+
+							usedColumnsInRow -=
+								nextViableImage.aspect_ratio > HORIZONTAL_ASPECT_RATIO ? 2 : 1;
+							usedRowsInColumn -=
+								nextViableImage.aspect_ratio < VERTICAL_ASPECT_RATIO ? 2 : 1;
+						}
+					} else if (usedColumnsInRow === columnCount) {
+						usedColumnsInRow = usedRowsInColumn;
+						usedRowsInColumn = 0;
+					}
+
+					imagePerRowCounter++;
+					index++;
+				}
+
+				setImages(newImages);
 			}
-
-			const startIndex = (currentPage - 1) * imagesPerPage;
-			const endIndex = startIndex + imagesPerPage;
-			const paginatedImages = images.slice(startIndex, endIndex);
-
-			const newColumns: ImageMeta[][] = Array.from(
-				{ length: columnCount },
-				() => []
-			);
-			paginatedImages.forEach((image, index) => {
-				newColumns[index % columnCount].push(image);
-			});
-			setColumns(newColumns);
 		};
 
 		updateColumns();
-		window.addEventListener("resize", updateColumns);
-
-		return () => window.removeEventListener("resize", updateColumns);
-	}, [images, currentPage]);
-
-	const totalPages = Math.ceil(images.length / imagesPerPage);
+	}, [columnCount]);
 
 	useEffect(() => {
 		const imagePath = searchParams.get("image");
@@ -108,9 +149,9 @@ export default function Gallery() {
 		}
 
 		if (!isNaN(pageFromQuery) && pageFromQuery > 0) {
-			setCurrentPage(pageFromQuery);
+			setPage(pageFromQuery);
 		} else {
-			setCurrentPage(1);
+			setPage(1);
 		}
 	}, [searchParams]);
 
@@ -137,9 +178,9 @@ export default function Gallery() {
 
 	useEffect(() => {
 		const params = new URLSearchParams(searchParams.toString());
-		params.set("page", currentPage.toString());
+		params.set("page", page.toString());
 		router.replace(`?${params.toString()}`, { scroll: false });
-	}, [currentPage, searchParams, router]);
+	}, [page, searchParams, router]);
 
 	const updateQueryParams = (newParams: Record<string, string>) => {
 		const params = new URLSearchParams(searchParams.toString());
@@ -156,128 +197,141 @@ export default function Gallery() {
 	};
 
 	return (
-		<>
-			<div className={styles.gallery}>
-				<div className={styles.tags}>
-					<span
-						key="all"
-						className={`${styles.tagsTag} ${
-							!searchParams.get("tag") ? styles.tagsTagActive : ""
-						}`}
-						onClick={() => removeQueryParam("tag")}
-					>
-						All
-					</span>
-					{tags.map((tag, index) => {
-						const activeTag = searchParams.get("tag");
+		<div className={styles.gallery}>
+			<div className={styles.tags}>
+				<span
+					key="all"
+					className={`${styles.tagsTag} ${
+						!searchParams.get("tag") ? styles.tagsTagActive : ""
+					}`}
+					onClick={() => removeQueryParam("tag")}
+				>
+					All
+				</span>
+				{tags.map((tag, index) => {
+					const activeTag = searchParams.get("tag");
 
-						return (
-							<span
-								key={index}
-								className={`${styles.tagsTag} ${
-									activeTag === tag ? styles.tagsTagActive : ""
-								}`}
-								onClick={() => updateQueryParams({ tag })}
-							>
-								{tag}
-							</span>
-						);
-					})}
-				</div>
-
-				<Paginator
-					currentPage={currentPage}
-					setCurrentPage={setCurrentPage}
-					totalPages={totalPages}
-					position={PaginatorPosition.TOP}
-				/>
-
-				<div className={styles.images}>
-					{!loading && images.length === 0 && <p>No images found</p>}
-					{!loading &&
-						columns.map((column, columnIndex) => (
-							<div className={styles.imagesColumn} key={columnIndex}>
-								{column.map((image) => (
-									<LazyImage
-										key={uuidv4()}
-										src={`/images/${image.relative_path}`}
-										alt={image.relative_path}
-										onClick={() =>
-											setFullScreenImage(`/images/${image.relative_path}`)
-										}
-									/>
-								))}
-							</div>
-						))}
-				</div>
-
-				<Paginator
-					currentPage={currentPage}
-					setCurrentPage={setCurrentPage}
-					totalPages={totalPages}
-					position={PaginatorPosition.BOTTOM}
-				/>
-
-				{fullScreenImage && (
-					<div
-						className={styles.fullscreenModal}
-						onClick={() => setFullScreenImage(null)}
-					>
-						<Image
-							src={fullScreenImage}
-							alt="Full Screen"
-							fill
-							style={{ objectFit: "contain" }}
-							onClick={(e) => e.stopPropagation()}
-						/>
-						<button
-							className={styles.closeButton}
-							onClick={(e) => {
-								e.stopPropagation();
-								setFullScreenImage(null);
-							}}
+					return (
+						<span
+							key={index}
+							className={`${styles.tagsTag} ${
+								activeTag === tag ? styles.tagsTagActive : ""
+							}`}
+							onClick={() => updateQueryParams({ tag })}
 						>
-							&times;
-						</button>
-
-						<button
-							className={`${styles.arrowButton} ${styles.arrowButtonLeft}`}
-							onClick={(e) => {
-								e.stopPropagation();
-								const currentIndex = images.findIndex(
-									(image) =>
-										`/images/${image.relative_path}` === fullScreenImage
-								);
-								if (currentIndex > 0) {
-									setFullScreenImage(
-										`/images/${images[currentIndex - 1].relative_path}`
-									);
-								}
-							}}
-						>
-							&#8249;
-						</button>
-
-						<button
-							className={`${styles.arrowButton} ${styles.arrowButtonRight}`}
-							onClick={(e) => {
-								e.stopPropagation();
-								const currentIndex = images.findIndex(
-									(image) =>
-										`/images/${image.relative_path}` === fullScreenImage
-								);
-								if (currentIndex < images.length - 1) {
-									setFullScreenImage(
-										`/images/${images[currentIndex + 1].relative_path}`
-									);
-								}
-							}}
-						>
-							&#8250;
-						</button>
-					</div>
-				)}
+							{tag}
+						</span>
+					);
+				})}
 			</div>
-		</>
+
+			<Paginator
+				page={page}
+				setPage={setPage}
+				totalPages={totalPages}
+				position={PaginatorPosition.TOP}
+			/>
+
+			<div className={styles.images}>
+				{!loading && images.length === 0 && <p>No images found</p>}
+				{!loading &&
+					images.map((image: ImageMeta) => (
+						<div
+							key={uuidv4()}
+							className={`${styles.imagesContainer} ${
+								image.aspect_ratio > HORIZONTAL_ASPECT_RATIO
+									? styles.horizontal
+									: image.aspect_ratio < VERTICAL_ASPECT_RATIO
+									? styles.vertical
+									: ""
+							}`}
+						>
+							<Image
+								width={
+									image.aspect_ratio > HORIZONTAL_ASPECT_RATIO
+										? image.width
+										: 350
+								}
+								height={
+									image.aspect_ratio < VERTICAL_ASPECT_RATIO
+										? image.height
+										: 350
+								}
+								loading="lazy"
+								src={`/images/${image.relative_path}`}
+								alt={image.aspect_ratio?.toString()}
+								onClick={() =>
+									setFullScreenImage(`/images/${image.relative_path}`)
+								}
+							/>
+						</div>
+					))}
+			</div>
+
+			<Paginator
+				page={page}
+				setPage={setPage}
+				totalPages={totalPages}
+				position={PaginatorPosition.BOTTOM}
+			/>
+
+			{fullScreenImage && (
+				<div
+					className={styles.fullscreenModal}
+					onClick={() => setFullScreenImage(null)}
+				>
+					<Image
+						src={fullScreenImage}
+						alt="Full Screen"
+						fill
+						style={{ objectFit: "contain" }}
+						onClick={(e) => e.stopPropagation()}
+					/>
+					<button
+						className={styles.closeButton}
+						onClick={(e) => {
+							e.stopPropagation();
+							setFullScreenImage(null);
+						}}
+					>
+						&times;
+					</button>
+
+					<button
+						className={`${styles.arrowButton} ${styles.arrowButtonLeft}`}
+						onClick={(e) => {
+							e.stopPropagation();
+							const currentIndex = images.findIndex(
+								(image) => `/images/${image.relative_path}` === fullScreenImage
+							);
+							if (currentIndex > 0) {
+								setFullScreenImage(
+									`/images/${images[currentIndex - 1].relative_path}`
+								);
+							}
+						}}
+					>
+						&#8249;
+					</button>
+
+					<button
+						className={`${styles.arrowButton} ${styles.arrowButtonRight}`}
+						onClick={(e) => {
+							e.stopPropagation();
+							const currentIndex = images.findIndex(
+								(image) => `/images/${image.relative_path}` === fullScreenImage
+							);
+							if (currentIndex < images.length - 1) {
+								setFullScreenImage(
+									`/images/${images[currentIndex + 1].relative_path}`
+								);
+							}
+						}}
+					>
+						&#8250;
+					</button>
+				</div>
+			)}
+		</div>
 	);
 }

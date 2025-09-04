@@ -6,6 +6,7 @@ import { ImageMeta } from '@/interfaces/image';
 import { v4 as uuidv4 } from 'uuid';
 import { ImagesResponse } from '@/interfaces/api';
 import { getToken } from '@auth/core/jwt';
+import sharp from 'sharp';
 
 const imagesDir = path.join(process.cwd(), 'public', 'images');
 const jsonPath = path.join(process.cwd(), 'data', 'images.json');
@@ -31,12 +32,13 @@ export async function GET(request: NextRequest) {
     const startIndex = (currentPage - 1) * imagesPerPage;
     const endIndex = startIndex + imagesPerPage;
 
+    const totalPages = Math.ceil(responseImages.length / imagesPerPage)
     responseImages = responseImages.slice(startIndex, endIndex < responseImages.length ? endIndex : responseImages.length);
 
     return NextResponse.json({
       images: responseImages,
       page: currentPage,
-      totalPages: Math.ceil(responseImages.length / imagesPerPage)
+      totalPages: totalPages
     } as ImagesResponse, { status: 200 });
   } catch (error) {
     console.error('Error reading images data:', error);
@@ -110,15 +112,20 @@ export async function POST(request: NextRequest) {
       await fs.writeFile(jsonPath, JSON.stringify({ images: [] }, null, 2));
     }
 
+    const imageInfo = await sharp(buffer).metadata();
+
     // Create image metadata
     const imageMeta: ImageMeta = {
       id: uuidv4(),
       relative_path: relativePath,
       tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
-      gridSize: { rows: 1, cols: 1 }
+      aspect_ratio: imageInfo.width && imageInfo.height ? imageInfo.width / imageInfo.height : 1,
+      width: imageInfo.width || 0,
+      height: imageInfo.height || 0
     };
 
     // Add new image to data
+    imagesData.push(imageMeta);
     imagesData.push(imageMeta);
 
     // Write image file and update JSON

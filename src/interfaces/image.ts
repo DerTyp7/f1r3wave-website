@@ -2,5 +2,7 @@ export interface ImageMeta {
   id: string;
   relative_path: string;
   tags: string[];
-  gridSize: { rows: number; cols: number };
+  aspect_ratio: number;
+  width: number;
+  height: number
 }
