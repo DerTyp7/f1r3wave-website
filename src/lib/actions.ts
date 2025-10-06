@@ -36,4 +36,7 @@ export async function logout() {
   c.delete('authjs.session-token');
   c.delete('authjs.csrf-token');
   c.delete('authjs.callback-url');
+  c.delete('__Host-authjs.csrf-token');
+  c.delete('__Secure-authjs.callback-url');
+  c.delete('__Secure-authjs.session-token');
 }
