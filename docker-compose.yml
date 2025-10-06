@@ -5,6 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
+      - NEXTAUTH_URL="https://f1r3wave.photos"
+      - AUTH_URL="https://f1r3wave.photos"
       - AUTH_SECRET="your-super-secret-key-here-generate-with-openssl-rand-base64-32"
       - ADMIN_TOKEN="your-admin-secret-token-123"
     ports:
