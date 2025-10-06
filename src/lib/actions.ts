@@ -1,8 +1,7 @@
 'use server';
 
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export async function authenticate(_prevState: string | undefined, formData: FormData): Promise<string> {
@@ -30,13 +29,7 @@ export async function authenticate(_prevState: string | undefined, formData: For
   }
 }
 
-export async function logout() {
-  const c = await cookies();
-
-  c.delete('authjs.session-token');
-  c.delete('authjs.csrf-token');
-  c.delete('authjs.callback-url');
-  c.delete('__Host-authjs.csrf-token');
-  c.delete('__Secure-authjs.callback-url');
-  c.delete('__Secure-authjs.session-token');
+export async function performLogout() {
+  await signOut({ redirectTo: '/', redirect: true });
+  redirect('/');
 }

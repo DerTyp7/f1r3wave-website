@@ -1,7 +1,7 @@
 'use client';
 
 import logo from '@/assets/logo_text.png';
-import { logout } from '@/lib/actions';
+import { performLogout } from '@/lib/actions';
 import { getAuthStatus } from '@/lib/auth-utils';
 import styles from '@/styles/Header.module.scss';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
@@ -41,8 +41,7 @@ export default function Header() {
         {isAuth ? (
           <p
             onClick={async () => {
-              await logout();
-              window.location.reload();
+              performLogout();
             }}
             className={`${styles.navLink}`}>
             Logout
