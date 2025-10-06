@@ -1,0 +1,63 @@
+.home {
+  display: flex;
+  flex: 1;
+  padding: 0 40px;
+  overflow: hidden;
+  background-image: url('/landing-page.jpg');
+  background-size: cover;
+
+  @media (max-width: 1200px) {
+    justify-content: center;
+  }
+}
+
+.homeText {
+  max-width: 750px;
+  min-width: 400px;
+  height: 100%;
+  margin-top: 80px;
+  padding: 0 10px;
+  z-index: 1;
+
+  @media (min-width: 1200px) {
+    margin-left: 100px;
+  }
+
+  &Headline {
+    letter-spacing: 5px;
+    text-shadow: 0px 0px #fff;
+    color: #fff;
+  }
+
+  &Paragraph {
+    letter-spacing: 2px;
+    text-shadow: 0px 0px #fff;
+    color: #fff;
+    margin-bottom: 50px;
+
+    b {
+      color: var(--color-accent);
+    }
+  }
+}
+
+.homeButton {
+  display: inline-block;
+  padding: 15px 30px;
+  background-color: rgba(165, 165, 165, 0.062);
+  border: 3px solid #afafaf;
+  border-radius: 5px;
+  font-size: 11pt;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 50ms linear;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background-color: rgba(165, 165, 165, 0.15);
+  }
+}

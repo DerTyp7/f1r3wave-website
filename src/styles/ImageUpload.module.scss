@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.form {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  font-weight: bold;
+  font-size: 15px;
+  height: 30px;
+}

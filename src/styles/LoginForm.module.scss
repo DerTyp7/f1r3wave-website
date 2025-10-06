@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  margin-top: 50px;
+  justify-content: center;
+  flex: 1;
+}
+
+.form {
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+  width: 500px;
+}
+
+.errorMessage {
+  text-align: center;
+  color: rgb(255, 76, 76);
+  font-weight: bold;
+  height: 20px;
+}

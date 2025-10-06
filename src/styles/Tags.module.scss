@@ -1,0 +1,25 @@
+.tags {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  gap: 5px 20px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.tag {
+  cursor: pointer;
+  padding: 0 5px;
+  transition: all 30ms ease-in-out;
+  border-bottom: 2px solid transparent;
+  font-size: 12pt;
+
+  &:hover {
+    border-bottom-color: var(--color-accent);
+  }
+
+  &Active {
+    border-bottom-color: var(--color-accent);
+    font-weight: bold;
+  }
+}

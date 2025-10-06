@@ -1,0 +1,18 @@
+.topbar {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 30px;
+  gap: 20px;
+  top: 0px;
+  position: sticky;
+
+  &Scroll {
+    background-color: rgba(7, 7, 7, 0.7);
+  }
+
+  @media (max-width: 800px) {
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

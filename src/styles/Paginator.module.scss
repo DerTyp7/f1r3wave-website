@@ -1,0 +1,36 @@
+.paginator {
+  display: flex;
+  justify-content: end;
+  align-items: start;
+  gap: 5px;
+  flex: 1;
+
+  button {
+    padding: 5px 10px;
+    border: none;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font-size: 12pt;
+    transition: all 30ms ease-in-out;
+
+    &:hover {
+      border-bottom-color: var(--color-accent);
+    }
+
+    &.active {
+      border-bottom-color: var(--color-accent);
+      font-weight: bold;
+    }
+
+    &:disabled {
+      background-color: #0f0f0f;
+      cursor: not-allowed;
+
+      &:hover {
+        border-bottom-color: transparent;
+      }
+    }
+  }
+}

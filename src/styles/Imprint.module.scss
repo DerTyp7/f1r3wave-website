@@ -1,0 +1,19 @@
+.imprint {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  margin-top: 20px;
+  width: 600px;
+  gap: 8px;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+}
+
+.imprintHeadline {
+  text-align: center;
+  margin-bottom: 15px;
+}

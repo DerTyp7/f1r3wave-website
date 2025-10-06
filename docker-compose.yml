@@ -1,0 +1,11 @@
+services:
+  website:
+    container_name: f1r3wave-website
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - AUTH_SECRET="your-super-secret-key-here-generate-with-openssl-rand-base64-32"
+      - ADMIN_TOKEN="your-admin-secret-token-123"
+    ports:
+      - 3000:3000

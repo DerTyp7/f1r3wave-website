@@ -1,0 +1,47 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  height: var(--header-height);
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 30px;
+
+  img {
+    height: 18px;
+    width: auto;
+  }
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  padding: 0 20px;
+
+  &Link {
+    transition: all 50ms ease-in-out;
+    border-bottom: 2px solid transparent;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+
+    &Active {
+      color: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+  }
+
+  &Socials {
+    display: flex;
+    gap: 5px;
+  }
+}

@@ -1,0 +1,28 @@
+.button {
+  height: 30px;
+  outline: 2px solid #24ceb1a1;
+  border-radius: 3px;
+  background-color: #ffffff0e;
+  border: 0;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+
+  &:focus,
+  &:hover {
+    outline: 2px solid var(--color-accent);
+    background-color: #ffffff1a;
+  }
+
+  &Disabled {
+    outline: 2px solid #746d6d;
+    background-color: #ffffff15;
+    cursor: not-allowed;
+
+    &:focus,
+    &:hover {
+      outline: 2px solid #746d6d;
+      background-color: #ffffff15;
+    }
+  }
+}

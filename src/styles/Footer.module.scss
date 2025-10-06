@@ -1,0 +1,25 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid rgba(128, 128, 128, 0.308);
+  font-size: 10pt;
+}
+
+.footerLandingPage {
+  margin-top: -70px;
+  border: 0;
+}
+
+.links {
+  display: flex;
+  gap: 40px;
+
+  &Link {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
