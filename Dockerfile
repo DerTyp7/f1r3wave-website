@@ -38,12 +38,14 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+RUN mkdir -p data && chown nextjs:nodejs data
+
 USER nextjs
 
 EXPOSE 3000
 
 ENV PORT=3000
-RUN mkdir -p /app/data && chown nextjs:nextjs /app/data
+
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
