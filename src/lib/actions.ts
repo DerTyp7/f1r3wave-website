@@ -3,11 +3,20 @@
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export async function authenticate(_prevState: string | undefined, formData: FormData): Promise<string> {
   try {
-    await signIn('credentials', formData);
-    return 'success';
+    const result = await signIn('credentials', {
+      redirect: false,
+      token: formData.get('token'),
+    });
+
+    if (result?.error) {
+      return 'Invalid token';
+    }
+
+    redirect('/admin');
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
