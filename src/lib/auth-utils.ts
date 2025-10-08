@@ -18,11 +18,13 @@ export async function getAuthStatus() {
 }
 
 export async function isAuthenticated(request: NextRequest): Promise<boolean> {
+  console.log('isAuthenticated');
   const token = await getToken({ req: request, secret: process.env.AUTH_SECRET });
-
+  console.log('token', token);
   if (!token || (token.exp && Date.now() / 1000 > token.exp)) {
+    console.log('false');
     return false;
   }
-
+  console.log('true');
   return true;
 }

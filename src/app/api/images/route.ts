@@ -52,6 +52,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  console.log('upload file', request);
   if (!(await isAuthenticated(request))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
