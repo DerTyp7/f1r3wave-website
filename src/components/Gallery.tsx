@@ -12,8 +12,8 @@ interface GalleryProps {
 }
 
 export default function Gallery({ initialImages }: GalleryProps) {
-  const HORIZONTAL_ASPECT_RATIO = 1.5;
-  const VERTICAL_ASPECT_RATIO = 0.9;
+  const HORIZONTAL_ASPECT_RATIO = 1.7;
+  const VERTICAL_ASPECT_RATIO = 0.8;
 
   const navigationRouter = useNavigationRouter();
   const searchParams = useSearchParams();
@@ -23,39 +23,44 @@ export default function Gallery({ initialImages }: GalleryProps) {
 
   useEffect(() => {
     const updateColumns = () => {
-      const newImages = [...initialImages];
+      const imageStack = [...initialImages];
+      const newImages: ImageMeta[] = [];
 
-      if (newImages.length > 0) {
+      if (imageStack.length > 0) {
         let usedColumnsInRow = 0;
         let usedRowsInColumn = 0;
         let index = 0;
 
-        for (const image of newImages) {
+        for (const image of imageStack) {
+          console.log('image', image.id);
           usedColumnsInRow += image.aspect_ratio > HORIZONTAL_ASPECT_RATIO ? 2 : 1;
           usedRowsInColumn += image.aspect_ratio < VERTICAL_ASPECT_RATIO ? 2 : 1;
 
           if (usedColumnsInRow > columnCount) {
-            const nextViableImage: ImageMeta | undefined = newImages.slice(index).find((img) => {
+            const nextViableImage: ImageMeta | undefined = imageStack.slice(index).find((img) => {
               const imgAspectRatio = img.aspect_ratio;
-              return imgAspectRatio <= HORIZONTAL_ASPECT_RATIO && image.aspect_ratio >= VERTICAL_ASPECT_RATIO;
+              return (
+                imgAspectRatio <= HORIZONTAL_ASPECT_RATIO &&
+                image.aspect_ratio >= VERTICAL_ASPECT_RATIO &&
+                !newImages.find((i) => i.id === img.id)
+              );
             });
 
             if (nextViableImage) {
-              newImages.splice(index, 1);
-              newImages.splice(index - 1, 0, nextViableImage);
+              newImages.push(nextViableImage);
 
               usedColumnsInRow -= nextViableImage.aspect_ratio > HORIZONTAL_ASPECT_RATIO ? 2 : 1;
               usedRowsInColumn -= nextViableImage.aspect_ratio < VERTICAL_ASPECT_RATIO ? 2 : 1;
             }
           } else if (usedColumnsInRow === columnCount) {
+            newImages.push(image);
             usedColumnsInRow = usedRowsInColumn;
             usedRowsInColumn = 0;
           }
-
           index++;
         }
-
-        setImages(newImages);
+        console.log('new images', imageStack);
+        setImages(imageStack);
       }
     };
 
@@ -73,7 +78,6 @@ export default function Gallery({ initialImages }: GalleryProps) {
       }
     };
 
-    setImages([...initialImages]);
     updateColumns();
     updateColumnCount();
     window.addEventListener('resize', updateColumnCount);
