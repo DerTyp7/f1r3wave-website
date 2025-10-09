@@ -9,7 +9,7 @@ export const configPath = path.join(dataDir, 'config.json');
 export const configTemplate: AppConfig = {
   home: {
     headline: 'Portfolio',
-    text: 'As a passionate <b>hobby photographer</b>, I capture the unique beauty and atmosphere of various places. Join me on a visual journey through my lens.',
+    text: 'Just a <b>hobby photographer</b> sharing moments that catch my eye.',
     buttonText: 'Visit Gallery',
   },
   contact: {
