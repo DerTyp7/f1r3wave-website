@@ -32,7 +32,6 @@ export default function Gallery({ initialImages }: GalleryProps) {
         let index = 0;
 
         for (const image of imageStack) {
-          console.log('image', image.id);
           usedColumnsInRow += image.aspect_ratio > HORIZONTAL_ASPECT_RATIO ? 2 : 1;
           usedRowsInColumn += image.aspect_ratio < VERTICAL_ASPECT_RATIO ? 2 : 1;
 
@@ -59,7 +58,7 @@ export default function Gallery({ initialImages }: GalleryProps) {
           }
           index++;
         }
-        console.log('new images', imageStack);
+
         setImages(imageStack);
       }
     };
