@@ -56,13 +56,19 @@ export default function Header() {
         </Link>
 
         {isAuth ? (
-          <p
-            onClick={async () => {
-              handleLogout();
-            }}
-            className={`${styles.navLink}`}>
-            Logout
-          </p>
+          <>
+            <Link href="/admin" className={`${styles.navLink} ${isActive('/admin') ? styles.navLinkActive : ''}`}>
+              Admin
+            </Link>
+
+            <p
+              onClick={async () => {
+                handleLogout();
+              }}
+              className={`${styles.navLink}`}>
+              Logout
+            </p>
+          </>
         ) : (
           ''
         )}
