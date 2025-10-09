@@ -131,7 +131,7 @@ export default function Gallery({ initialImages }: GalleryProps) {
               width={image.aspect_ratio > HORIZONTAL_ASPECT_RATIO ? image.width : 700}
               height={image.aspect_ratio < VERTICAL_ASPECT_RATIO ? image.height : 700}
               loading="lazy"
-              src={`/images/${image.relative_path}`}
+              src={`/api/images/${image.id}`}
               alt={image.aspect_ratio?.toString()}
               onClick={() => setFullScreenImage(`/images/${image.relative_path}`)}
             />

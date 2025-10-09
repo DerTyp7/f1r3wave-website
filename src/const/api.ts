@@ -1,4 +1,5 @@
-import path from "path";
+import path from 'path';
 
-export const imagesDir = path.join(process.cwd(), 'public', 'images');
-export const jsonPath = path.join(process.cwd(), 'data', 'images.json');
+const dataDir = path.join(process.cwd(), 'data');
+export const imagesDir = path.join(dataDir, 'images');
+export const jsonPath = path.join(dataDir, 'images.json');

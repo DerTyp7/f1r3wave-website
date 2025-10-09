@@ -117,7 +117,7 @@ export default function ImageManager({ images: initialImages, tags: initialTags 
             {images.map((image) => (
               <tr key={image.id}>
                 <td>
-                  <Image src={`/images/${image.relative_path}`} height={50} width={50} alt={image.id} />
+                  <Image src={`/api/images/${image.id}`} height={50} width={50} alt={image.id} />
                 </td>
                 <td>{image.id}</td>
                 <td>

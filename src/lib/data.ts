@@ -23,6 +23,10 @@ export async function getImageData(): Promise<ImageMeta[]> {
   }
 }
 
+export async function getImageDataById(id: string): Promise<ImageMeta | undefined> {
+  return (await getImageData()).find((image) => image.id === id);
+}
+
 export function stringToTags(string: string): string[] {
   return string
     ? string

@@ -1,6 +1,5 @@
 .next
 .vscode
-public/images
 node_modules
 data
 .env
