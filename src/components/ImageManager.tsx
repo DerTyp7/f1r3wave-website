@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import Button from '@/components/Button';
@@ -5,19 +6,14 @@ import InputField from '@/components/InputField';
 import { ImageMeta } from '@/interfaces/image';
 import styles from '@/styles/ImageManager.module.scss';
 import Image from 'next/image';
-import { redirect, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import Tags from './Tags';
 
-interface ImageManagerProps {
-  images: ImageMeta[];
-  tags: string[];
-}
-
-export default function ImageManager({ images: initialImages, tags: initialTags }: ImageManagerProps) {
-  const [images, setImages] = useState<ImageMeta[]>(initialImages);
+export default function ImageManager() {
+  const [images, setImages] = useState<ImageMeta[]>([]);
   const [error, setError] = useState<string>();
-  const [tags, setTags] = useState<string[]>(initialTags);
+  const [tags, setTags] = useState<string[]>([]);
   const [activeTag, setActiveTag] = useState<string>('all');
   const searchParams = useSearchParams();
 
@@ -92,23 +88,17 @@ export default function ImageManager({ images: initialImages, tags: initialTags 
   };
 
   useEffect(() => {
-    setActiveTag(searchParams.get('tag') ?? 'all');
-  }, [searchParams, tags]);
+    fetchTags();
+    fetchImages();
+  }, []);
 
   useEffect(() => {
-    const filterImages = () => {
-      if (activeTag === 'all') {
-        setImages(initialImages);
-        return;
-      } else if (activeTag && !tags.includes(activeTag)) {
-        redirect('/admin');
-      } else {
-        setImages(initialImages.filter((image) => image.tags.includes(activeTag)));
-      }
-    };
+    fetchImages();
+  }, [activeTag]);
 
-    filterImages();
-  }, [activeTag, initialImages, tags]);
+  useEffect(() => {
+    setActiveTag(searchParams.get('tag') ?? 'all');
+  }, [searchParams, tags]);
 
   return (
     <div className={styles.container}>
