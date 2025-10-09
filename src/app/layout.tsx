@@ -3,6 +3,14 @@ import Header from '@/components/Header';
 import { ConfigProvider } from '@/contexts/ConfigContext';
 import './index.scss';
 
+export const metadata = {
+  title: 'F1r3wave - Portfolio',
+  description: 'Image portfolio of F1r3wave.',
+  icons: {
+    icon: '/favicon.png',
+  },
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{
