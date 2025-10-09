@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { ConfigContextType } from '@/interfaces/config';
 import { createContext, useContext } from 'react';

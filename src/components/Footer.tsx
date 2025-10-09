@@ -1,5 +1,6 @@
 'use client';
 
+import { useConfig } from '@/contexts/configExports';
 import styles from '@/styles/Footer.module.scss';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -12,6 +13,7 @@ interface FooterProps {
 export default function Footer({ currentYear }: FooterProps) {
   const [isInLandingPage, setIsInLandingPage] = useState<boolean>(false);
   const pathname = usePathname();
+  const { config } = useConfig();
 
   useEffect(() => {
     setIsInLandingPage(pathname === '/');
@@ -20,9 +22,13 @@ export default function Footer({ currentYear }: FooterProps) {
   return (
     <footer className={`${styles.footer} ${isInLandingPage ? styles.footerLandingPage : ''}`}>
       <div className={styles.links}>
-        <Link href="/imprint" className={styles.linksLink}>
-          Imprint
-        </Link>
+        {config?.contact.imprint.enable ? (
+          <Link href="/imprint" className={styles.linksLink}>
+            Imprint
+          </Link>
+        ) : (
+          ''
+        )}
         <Link
           href="https://github.com/DerTyp7/f1r3wave-website"
           className={styles.linksLink}

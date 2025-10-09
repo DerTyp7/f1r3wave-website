@@ -25,7 +25,7 @@
 			}
 		],
 		"imprint": {
-			"enable": true,
+			"enable": false,
 			"headline": "Imprint / Legal Notice",
 			"name": "[Your Full Name]",
 			"address": "[Your Full Address: Street and House Number, Postcode City]",
