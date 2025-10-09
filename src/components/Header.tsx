@@ -77,7 +77,7 @@ export default function Header() {
             <FontAwesomeIcon icon={faInstagram} />
           </Link>
 
-          <Link className={styles.navLink} href="mailto:f1r3wave@tealfire.de" target="_blank">
+          <Link className={styles.navLink} href="mailto:eric@f1r3wave.photos" target="_blank">
             <FontAwesomeIcon icon={faEnvelope} />
           </Link>
         </div>
