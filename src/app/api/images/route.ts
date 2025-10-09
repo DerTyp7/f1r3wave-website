@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     const images: ImageMeta[] = await getImageData();
     let responseImages = images;
 
-    if (tag) {
+    if (tag && tag.toLowerCase() !== 'all') {
       responseImages = responseImages.filter((image: ImageMeta) => image.tags.includes(tag));
     }
 

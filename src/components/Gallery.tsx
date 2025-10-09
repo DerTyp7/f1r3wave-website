@@ -19,7 +19,7 @@ export default function Gallery({ initialImages }: GalleryProps) {
   const searchParams = useSearchParams();
   const [images, setImages] = useState<ImageMeta[]>([]);
   const [columnCount, setColumnCount] = useState(0);
-  const [fullScreenImage, setFullScreenImage] = useState<string | null>(null);
+  const [fullScreenImageId, setFullScreenImageId] = useState<string | null>(null);
 
   useEffect(() => {
     const updateColumns = () => {
@@ -81,18 +81,14 @@ export default function Gallery({ initialImages }: GalleryProps) {
   }, [columnCount, initialImages]);
 
   useEffect(() => {
-    const imagePath = searchParams.get('image');
-
-    if (imagePath) {
-      setFullScreenImage(`/images/${imagePath}`);
-    }
+    const imageId = searchParams.get('image');
+    setFullScreenImageId(imageId);
   }, [searchParams]);
 
   useEffect(() => {
-    if (fullScreenImage) {
+    if (fullScreenImageId) {
       const params = new URLSearchParams(searchParams.toString());
-      const relativePath = fullScreenImage.replace('/images/', '');
-      params.set('image', relativePath);
+      params.set('image', fullScreenImageId);
       navigationRouter.replace(`?${params.toString()}`, { scroll: false });
 
       document.body.style.overflow = 'hidden';
@@ -107,7 +103,7 @@ export default function Gallery({ initialImages }: GalleryProps) {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [fullScreenImage, searchParams, navigationRouter]);
+  }, [fullScreenImageId, searchParams, navigationRouter]);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -133,16 +129,16 @@ export default function Gallery({ initialImages }: GalleryProps) {
               loading="lazy"
               src={`/api/images/${image.id}`}
               alt={image.aspect_ratio?.toString()}
-              onClick={() => setFullScreenImage(`/images/${image.relative_path}`)}
+              onClick={() => setFullScreenImageId(image.id)}
             />
           </div>
         ))}
       </div>
 
-      {fullScreenImage && (
-        <div className={styles.fullscreenModal} onClick={() => setFullScreenImage(null)}>
+      {fullScreenImageId && (
+        <div className={styles.fullscreenModal} onClick={() => setFullScreenImageId(null)}>
           <Image
-            src={fullScreenImage}
+            src={`/api/images/${fullScreenImageId}`}
             alt="Full Screen"
             width={1920}
             height={1080}
@@ -153,7 +149,7 @@ export default function Gallery({ initialImages }: GalleryProps) {
             className={styles.closeButton}
             onClick={(e) => {
               e.stopPropagation();
-              setFullScreenImage(null);
+              setFullScreenImageId(null);
             }}>
             &times;
           </button>
@@ -162,9 +158,9 @@ export default function Gallery({ initialImages }: GalleryProps) {
             className={`${styles.arrowButton} ${styles.arrowButtonLeft}`}
             onClick={(e) => {
               e.stopPropagation();
-              const currentIndex = images.findIndex((image) => `/images/${image.relative_path}` === fullScreenImage);
+              const currentIndex = images.findIndex((image) => image.id === fullScreenImageId);
               if (currentIndex > 0) {
-                setFullScreenImage(`/images/${images[currentIndex - 1].relative_path}`);
+                setFullScreenImageId(images[currentIndex - 1].id);
               }
             }}>
             &#8249;
@@ -174,9 +170,9 @@ export default function Gallery({ initialImages }: GalleryProps) {
             className={`${styles.arrowButton} ${styles.arrowButtonRight}`}
             onClick={(e) => {
               e.stopPropagation();
-              const currentIndex = images.findIndex((image) => `/images/${image.relative_path}` === fullScreenImage);
+              const currentIndex = images.findIndex((image) => image.id === fullScreenImageId);
               if (currentIndex < images.length - 1) {
-                setFullScreenImage(`/images/${images[currentIndex + 1].relative_path}`);
+                setFullScreenImageId(images[currentIndex + 1].id);
               }
             }}>
             &#8250;

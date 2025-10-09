@@ -31,6 +31,18 @@ export default function ImageManager({ images: initialImages, tags: initialTags 
       });
   };
 
+  const fetchImages = () => {
+    fetch(`/api/images?imagesPerPage=-1&tag=${activeTag}`, {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((newImages) => {
+        if (newImages && newImages.images) {
+          setImages(newImages.images);
+        }
+      });
+  };
+
   const onDelete = (id: string) => {
     fetch(`/api/images/${id}`, {
       method: 'DELETE',
@@ -41,8 +53,8 @@ export default function ImageManager({ images: initialImages, tags: initialTags 
         if (response.error) {
           setError(response.error);
         } else {
-          setImages(images.filter((image) => image.id !== id));
           fetchTags();
+          fetchImages();
         }
       });
   };
