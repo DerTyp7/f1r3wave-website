@@ -1,9 +1,11 @@
-import { isAuthenticated } from '@/lib/auth-utils';
 import { stringToTags, updateTagsOfImageId } from '@/lib/data';
+import { getSession } from '@/lib/session';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function PUT(request: NextRequest, context: { params: Promise<{ imageId: string }> }) {
-  if (!(await isAuthenticated(request))) {
+  const session = await getSession();
+
+  if (!session.isAuthenticated) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

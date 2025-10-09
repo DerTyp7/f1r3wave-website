@@ -1,9 +1,11 @@
-import { isAuthenticated } from '@/lib/auth-utils';
 import { deleteImageById } from '@/lib/data';
+import { getSession } from '@/lib/session';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-  if (!(await isAuthenticated(request))) {
+  const session = await getSession();
+
+  if (!session.isAuthenticated) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

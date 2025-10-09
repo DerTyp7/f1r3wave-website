@@ -1,11 +1,11 @@
 import LoginForm from '@/components/LoginForm';
-import { getAuthStatus } from '@/lib/auth-utils';
+import { getSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
 
 export default async function LoginPage() {
-  const { isAuthenticated } = await getAuthStatus();
+  const session = await getSession();
 
-  if (isAuthenticated) {
+  if (session.isAuthenticated) {
     redirect('/admin');
   }
 

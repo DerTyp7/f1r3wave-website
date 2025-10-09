@@ -1,29 +1,46 @@
 'use client';
 
 import logo from '@/assets/logo_text.png';
-import { performLogout } from '@/lib/actions';
-import { getAuthStatus } from '@/lib/auth-utils';
+import { deleteSessionCookie } from '@/lib/actions';
 import styles from '@/styles/Header.module.scss';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const isActive = (path: string) => pathname.split('/')[1] === path.split('/')[1];
 
+  const performLogout = async (): Promise<void> => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+  };
+
   useEffect(() => {
     const auth = async () => {
-      const { isAuthenticated } = await getAuthStatus();
+      const result = await fetch('/api/auth/status', { method: 'GET' });
+      const isAuthenticated = (await result.json()).isAuthenticated;
+
+      if (!isAuthenticated) {
+        await deleteSessionCookie();
+      }
+
       setIsAuth(isAuthenticated);
     };
     auth();
   }, [pathname]);
+
+  const handleLogout = async () => {
+    await performLogout();
+    setIsAuth(false);
+    router.push('/');
+    router.refresh();
+  };
 
   return (
     <header className={`${styles.header}`}>
@@ -41,7 +58,7 @@ export default function Header() {
         {isAuth ? (
           <p
             onClick={async () => {
-              performLogout();
+              handleLogout();
             }}
             className={`${styles.navLink}`}>
             Logout

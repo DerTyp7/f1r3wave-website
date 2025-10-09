@@ -1,14 +1,14 @@
 import ImageManager from '@/components/ImageManager';
 import ImageUpload from '@/components/ImageUpload';
 import { ImagesResponse, TagsResponse } from '@/interfaces/api';
-import { getAuthStatus } from '@/lib/auth-utils';
+import { getSession } from '@/lib/session';
 import styles from '@/styles/AdminPage.module.scss';
 import { redirect } from 'next/navigation';
 
 export default async function AdminPage() {
-  const { isAuthenticated } = await getAuthStatus();
+  const session = await getSession();
 
-  if (!isAuthenticated) {
+  if (!session.isAuthenticated) {
     redirect('/login');
   }
 

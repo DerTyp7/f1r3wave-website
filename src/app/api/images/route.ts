@@ -1,10 +1,11 @@
 import { imagesDir } from '@/const/api';
 import { ImagesResponse } from '@/interfaces/api';
 import { ImageMeta } from '@/interfaces/image';
-import { isAuthenticated } from '@/lib/auth-utils';
 import { addImage, getImageData, stringToTags } from '@/lib/data';
+import { getSession } from '@/lib/session';
 import { promises as fs } from 'fs';
 import { NextRequest, NextResponse } from 'next/server';
+import path from 'path';
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -52,8 +53,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  console.log('upload file', request);
-  if (!(await isAuthenticated(request))) {
+  const session = await getSession();
+
+  if (!session.isAuthenticated) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -83,6 +85,8 @@ export async function POST(request: NextRequest) {
       await fs.mkdir(imagesDir, { recursive: true });
     }
 
+    await fs.writeFile(path.join(imagesDir, uuidFilename), buffer);
+
     const imageInfo = await sharp(buffer).metadata();
 
     const newImage: ImageMeta = {
@@ -95,8 +99,9 @@ export async function POST(request: NextRequest) {
     };
 
     await addImage(newImage);
-    return NextResponse.json({ message: 'File deleted successfully' }, { status: 201 });
+    return NextResponse.json({ message: 'File uploaded successfully' }, { status: 201 });
   } catch (error) {
     console.error(error);
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
