@@ -12,7 +12,7 @@ interface GalleryProps {
 }
 
 export default function Gallery({ initialImages }: GalleryProps) {
-  const HORIZONTAL_ASPECT_RATIO = 1.7;
+  const HORIZONTAL_ASPECT_RATIO = 1.8;
   const VERTICAL_ASPECT_RATIO = 0.8;
 
   const navigationRouter = useNavigationRouter();
