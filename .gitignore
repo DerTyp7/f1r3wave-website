@@ -19,7 +19,8 @@
 
 # production
 /build
-/data
+/data/*
+!/data/config.json
 
 # misc
 .DS_Store
