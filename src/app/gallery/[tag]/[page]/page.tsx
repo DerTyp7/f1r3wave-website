@@ -1,6 +1,8 @@
 import Gallery from '@/components/Gallery';
+import Paginator from '@/components/Paginator';
 import Topbar from '@/components/Topbar';
 import { ImagesResponse, TagsResponse } from '@/interfaces/api';
+import { PaginatorPosition } from '@/interfaces/paginator';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
@@ -46,6 +48,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ page: 
       <Suspense fallback={<div>Loading gallery...</div>}>
         <Topbar activeTag={tag} tags={tags} page={page} totalPages={images.totalPages} />
         <Gallery initialImages={images.images} />
+        <Paginator page={page} totalPages={images.totalPages} position={PaginatorPosition.BOTTOM} />
       </Suspense>
     </>
   );
